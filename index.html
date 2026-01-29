@@ -154,10 +154,28 @@
 
         // Jump function
         function jump() {
-            if (!isJumping && gameRunning) {
+            if (!gameRunning) {
+                // Restart game
+                restartGame();
+                return;
+            }
+            if (!isJumping) {
                 isJumping = true;
                 jumpVelocity = witch.jumpPower;
             }
+        }
+
+        // Restart game function
+        function restartGame() {
+            score = 0;
+            gameSpeed = 3;
+            isJumping = false;
+            jumpVelocity = 0;
+            gameRunning = true;
+            obstacles = [];
+            witch.y = canvas.height - 40;
+            scoreElement.textContent = score;
+            gameLoop();
         }
 
         // Game loop
@@ -190,7 +208,7 @@
                     continue;
                 }
 
-                // Check collision
+                // Game over display
                 if (witch.x < obstacle.x + obstacle.width &&
                     witch.x + witch.width > obstacle.x &&
                     witch.y < obstacle.y + obstacle.height &&
@@ -199,6 +217,9 @@
                     ctx.fillStyle = '#ef4444';
                     ctx.font = 'bold 16px monospace';
                     ctx.fillText('GAME OVER!', canvas.width/2 - 50, canvas.height/2);
+                    ctx.font = '12px monospace';
+                    ctx.fillStyle = '#60a5fa';
+                    ctx.fillText('PRESS SPACE TO RESTART', canvas.width/2 - 80, canvas.height/2 + 20);
                     return;
                 }
 
